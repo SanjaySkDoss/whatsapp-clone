@@ -12,16 +12,18 @@ export default function Home() {
 
 
     useEffect(() => {
+        const point = 'http://localhost:5000';
+        const socket = io(point);
+        console.log(socket);
         console.log('effect is here')
         let token = window.localStorage.getItem("token")
         Token = token;
         if (token) {
             context.handleToken(token)
             // check();
-
-
         }
     }, [Token])
+
     useEffect(() => {
         const point = 'http://localhost:5000';
         const socket = io(point);

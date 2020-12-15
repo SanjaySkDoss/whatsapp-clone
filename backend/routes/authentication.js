@@ -13,8 +13,6 @@ const saltRounds = parseInt(process.env.ROUNDS);
 module.exports = function (app) {
 
   app.post('/signin', function (req, res) {
-
-
     User.findOne({ username: req.body.username }).then(user => {
       if (user) {
         bcrypt.compare(req.body.password, user.password, function (err, result) {
@@ -61,33 +59,23 @@ module.exports = function (app) {
   });
 
   app.post('/signup', function (req, res) {
-
-
     const newUser = {
       username: req.body.username,
       password: req.body.password
     }
-
-
     User.findOne({ username: newUser.username }).then(user => {
-
       if (!user) {
         bcrypt.hash(newUser.password, saltRounds, function (err, hash) {
 
           newUser.password = hash;
           User.create(newUser)
             .then(usr => {
-            
               Room.create({ _id: usr._id }).then(room => {
-
-
                 const payload = {
                   _id: usr._id,
                   username: newUser.username
                 };
                 // Authenticate using JWT
-
-
                 let token = jwt.sign(payload, secret, {
                   expiresIn: 2000
                 });
@@ -104,11 +92,7 @@ module.exports = function (app) {
               console.log(err, "iko2")
             });
 
-        }).catch(err => {
-          console.log(err, "iko3")
-        });
-
-
+        })
       }
       else {
         res.json({
@@ -118,7 +102,6 @@ module.exports = function (app) {
         });
       }
     })
-
   });
 
 
@@ -137,10 +120,4 @@ module.exports = function (app) {
     message.save()
       .then(() => res.json(message));
   })
-
-  
-
-
-
-
 }
